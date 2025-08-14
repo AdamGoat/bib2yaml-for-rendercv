@@ -19,8 +19,13 @@ months_to_num_dict = {
     "dec": 12, "december": 12
 }
 
-def null_checker(bib_entry, key):
-    return bib_entry[key] if key in bib_entry and bib_entry[key] is not None else None
+def null_checker(bib_entry, key, key2=None):
+    rtn = None
+    if key in bib_entry and bib_entry[key] is not None:
+        rtn = bib_entry[key]
+    elif key2 is not None and key2 in bib_entry and bib_entry[key2] is not None:
+        rtn = bib_entry[key2]
+    return rtn
 
 def bib2yaml(input_file, output_file, author_name, sort_by_date=True, number_papers=True):
     with open(input_file) as f:
@@ -28,8 +33,20 @@ def bib2yaml(input_file, output_file, author_name, sort_by_date=True, number_pap
 
     new_output = []
 
+    for entry in db.entries:
+        year = entry.get("year")
+        month = entry.get("month").lower() if entry.get("month") else None
+
+        if year:
+            full_date = str(year)
+            if month:
+                full_date = f"{year}-{months_to_num_dict[month]:02d}"
+
+        entry["date"] = full_date
+
     if sort_by_date:
-        sortedDB = sorted(db.entries, key=lambda x: (x.get("year", ""), x.get("month", "")), reverse=True)
+        # sortedDB = sorted(db.entries, key=lambda x: (x.get("year", ""), x.get("month", "")), reverse=True)
+        sortedDB = sorted(db.entries, key=lambda x: (x.get("date", "")), reverse=True)
     else:
         sortedDB = db.entries
 
@@ -39,7 +56,8 @@ def bib2yaml(input_file, output_file, author_name, sort_by_date=True, number_pap
 
         # TODO: Check if the any of the visible name is same as the CV author, if yes then encapsulate in "***"
 
-        authors = [author.strip() for author in entry["author"].split("and")]
+        authors = [author.strip() for author in entry["author"].split(" and ")]
+        authors = ["{1} {0}".format(*author.split(',')).lstrip() if ',' in author else author for author in authors ]
         authors = ["***"+author+"***" if author_name in author else author for author in authors]
         # if len(authors) > 7:
         #     authors = [authors[0], "et al."]
@@ -48,28 +66,20 @@ def bib2yaml(input_file, output_file, author_name, sort_by_date=True, number_pap
             filtered_entry = {
                 "title": f"{num_papers}. {entry['title']}",
                 "authors": authors,
-                "journal": null_checker(entry, "journal"),
+                "journal": null_checker(entry, "journal", "booktitle"),
                 "doi": null_checker(entry, "doi"),
                 "url": null_checker(entry, "url"),
+                "date": null_checker(entry, "date"),
             }
         else:
             filtered_entry = {
                 "title":  entry["title"],
                 "authors": authors,
-                "journal": null_checker(entry, "journal"),
+                "journal": null_checker(entry, "journal", "booktitle"),
                 "doi": null_checker(entry, "doi"),
                 "url": null_checker(entry, "url"),
+                "date": null_checker(entry, "date"),
             }
-
-        year = entry.get("year")
-        month = entry.get("month").lower() if entry.get("month") else None
-
-        if year:
-            full_date = str(year)
-            if month:
-                full_date = f"{year}-{months_to_num_dict[month]:02d}"
-
-        filtered_entry["date"] = full_date
 
         new_output.append({key: value for key, value in filtered_entry.items() if value is not None})
 
