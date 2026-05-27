@@ -55,10 +55,11 @@ def bib2yaml(input_file, output_file, author_name, sort_by_date=True, number_pap
     for entry in sortedDB:
 
         # TODO: Check if the any of the visible name is same as the CV author, if yes then encapsulate in "***"
+        # NO, BAD, do not do this, let the rendercv bold_Keywords handle this
 
         authors = [author.strip() for author in entry["author"].split(" and ")]
         authors = ["{1} {0}".format(*author.split(',')).lstrip() if ',' in author else author for author in authors ]
-        authors = ["***"+author+"***" if author_name in author else author for author in authors]
+        # authors = ["***"+author+"***" if author_name in author else author for author in authors]
         # if len(authors) > 7:
         #     authors = [authors[0], "et al."]
         if number_papers:
