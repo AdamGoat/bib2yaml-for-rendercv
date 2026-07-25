@@ -1,24 +1,26 @@
-- title: A Study on Machine Learning Algorithms
+- title: 5. Introduction to Astrophysics
   authors:
+  - Michael Jones
+  date: '2021'
+- title: 4. Analysis of Renewable Energy Sources
+  authors:
+  - Emily Miller
+  - '***Adam Goad***'
+  date: '2021'
+- title: 3. A Study on Machine Learning Algorithms
+  authors:
+  - '***Adam C. Goad***'
   - John Smith
   - Jane Doe
   journal: Journal of Artificial Intelligence
   doi: 10.1016/j.jai.2020.01.001
-  date: '2020'
-- title: Introduction to Astrophysics
-  authors:
-  - Michael Jones
-  date: '2018'
-- title: Advancements in Quantum Computing
+  date: 2020-03
+- title: 2. Advancements in Quantum Computing
   authors:
   - Li Wang
   - David Brown
   date: '2019'
-- title: Analysis of Renewable Energy Sources
-  authors:
-  - Emily Miller
-  date: '2021'
-- title: Modeling and Simulation of Urban Traffic Systems
+- title: 1. Modeling and Simulation of Urban Traffic Systems
   authors:
   - Minho Lee
   date: '2017'
