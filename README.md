@@ -1,5 +1,5 @@
 # bib2yaml-for-rendercv
-My for of sahiljhawar's "bib2yaml-for-rendercv"
+My fork of sahiljhawar's "bib2yaml-for-rendercv"
 
 Install the dependencies with `pip install -r requirements.txt`.
 
